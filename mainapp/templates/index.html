@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+* {box-sizing: border-box;}
+
+/* Button used to open the chat form - fixed at the bottom of the page */
+.open-button {
+  background-color: #555;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  position: fixed;
+  bottom: 23px;
+  right: 28px;
+  width: 280px;
+}
+
+/* The popup chat - hidden by default */
+.chat-popup {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  right: 15px;
+  border: 3px solid #f1f1f1;
+  z-index: 9;
+}
+
+/* Add styles to the form container */
+.form-container {
+  max-width: 300px;
+  padding: 10px;
+  background-color: white;
+}
+
+/* Full-width textarea */
+.form-container textarea {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  border: none;
+  background: #f1f1f1;
+  resize: none;
+  min-height: 200px;
+}
+
+/* When the textarea gets focus, do something */
+.form-container textarea:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+/* Set a style for the submit/send button */
+.form-container .btn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom:10px;
+  opacity: 0.8;
+}
+
+/* Add a red background color to the cancel button */
+.form-container .cancel {
+  background-color: red;
+}
+
+/* Add some hover effects to buttons */
+.form-container .btn:hover, .open-button:hover {
+  opacity: 1;
+}
+</style>
+</head>
+<body>
+
+<h2>Simple predefined django chatbot</h2>
+<p>You can pre-define the faq and let bot do its work.</p>
+<p>Click on <b>ask me</b> to test.</p>
+
+
+<button class="open-button" onclick="openForm()">Ask me</button>
+
+<div class="chat-popup" id="myForm">
+  <form action="/" method="POST" class="form-container">
+    <h4 id="reply">{{message}}</h4>
+    <!-- <label for="msg"><b>Message</b></label> -->
+    {% csrf_token %}
+    <textarea placeholder="Your question here" id="msg" name="msg" required></textarea>
+    <button type="button" id="submit" class="btn">Send</button>
+    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+  </form>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+function openForm() {
+  document.getElementById("myForm").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("myForm").style.display = "none";
+}
+
+$("#submit").click(function (event) {
+
+    $.ajax({
+      type: "POST",
+      url: "{% url 'mainapp:botreply' %}",
+      data: {
+        'msg': $('#msg').val(),
+        csrfmiddlewaretoken: "{{csrf_token}}" // from form
+      },
+      dataType: 'json',
+            success: function(res) {
+
+                    $("#reply").html(res.botreply);
+                    // $("#msg").val('')
+                        
+                   
+
+            }
+    });
+    return false; //<---- move it here
+  });
+</script>
+
+</body>
+</html>
+
+<!-- {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css">
+    <link rel="stylesheet" href="{% static 'bot.css'%}">
+    <title>Chat Window</title>
+</head>
+<body>
+    
+
+    <section>
+        <h1>Chat Popup</h1>
+        <p>Click on the chat button to start chatting</p>
+
+        <button class="chat-btn"> 
+            <i class="material-icons"> comment </i>
+        </button>
+
+        <div class="chat-popup">
+            <div class="badge">1</div>
+            <div class="chat-area">
+             <div class="income-msg">
+                 <img src="img/person.jpg" class="avatar" alt="">
+                 <span class="msg"> Hi, How can I help you?</span>
+             </div>   
+            </div>
+
+            <div class="input-area">
+                <input type="text" />
+                <button id="emoji-btn"> &#127773;</button>
+                <button class="submit"> <i class="material-icons"> send</i></button>
+            </div>
+        </div>
+    </section>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.1.1/dist/index.min.js"></script>
+    <script src="{% static 'bot.js' %}"></script>
+</body>
+</html> -->

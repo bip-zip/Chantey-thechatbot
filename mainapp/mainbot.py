@@ -34,10 +34,15 @@ def check_all_messages(message):
         highest_prob_list[bot_response] = message_probability(message, list_of_words, single_response, required_words)
 
     response('Namaste, Sanchai Hunuhuncha?', ['hello', 'hi', 'hey', 'sup', 'heyo'], single_response=True)
-    response('See you!', ['bye', 'goodbye'], single_response=True)
-    response('I\'m doing fine, and you?', ['how', 'are', 'you', 'doing'], required_words=['how'])
+    response('See you!.', ['bye', 'goodbye'], single_response=True)
+    response('I love you more.', ['love', 'you'], single_response=True)
+    response('Bachekai chu', ['k', 'cha'], single_response=True)
+    response('bip-zip created me. I am so greatful to exist.', ['who','creator', 'made','you'],required_words=['who'], single_response=True)
+    response('I am chantey. Your comrade your chatbot.', ['who', 'are', 'you'], required_words=['you'],single_response=True)
+    response('I\'m doing fine, and you?', ['how', 'are', 'you', 'doing',], required_words=['how'])
     response('You\'re welcome!', ['thank', 'thanks'], single_response=True)
-    response('Thank you!', ['i', 'love', 'code', 'palace'], required_words=['code', 'palace'])
+    response('Thank you!', ['i', 'love', 'bip', 'zip'], required_words=['bip', 'zip'])
+
 
     # Longer responses
     response(R_ADVICE, ['give', 'advice'], required_words=['advice'])
@@ -65,8 +70,3 @@ def unknown():
                 "What does that mean?"][
         random.randrange(4)]
     return response
-
-
-# # Testing the response system
-# while True:
-#     print('Bot: ' + get_response(input('You: ')))
